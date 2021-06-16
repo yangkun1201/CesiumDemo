@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesium App 加载影像</title>
+    <script src="./scripts/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="./scripts/Cesium/Widgets/widgets.css">
+    <style>
+        html,body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer" style="width: 100%;height: 100%;"></div>
+    <script>
+        var geeMetadata = new Cesium.GoogleEarthEnterpriseMetadata('http://www.earthenterprise.org/3d');
+        var gee = new Cesium.GoogleEarthEnterpriseImageryProvider({
+            metadata : geeMetadata
+        });
+
+        var google = new Cesium.UrlTemplateImageryProvider({
+            url: "http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali"
+        })
+
+        var osm = new Cesium.OpenStreetMapImageryProvider({
+            url: "https://a.tile.openstreetmap.org/",
+            minimumLevel: 0,
+            maximumLevel: 18,
+            fileExtension: "png",
+        });
+
+        var gd = new Cesium.UrlTemplateImageryProvider({
+            url: "http://webrd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
+        })
+
+        var tianditu = new Cesium.WebMapTileServiceImageryProvider({
+            url: "http://t0.tianditu.com/img_w/wmts?service=wmts&request=GetTile&version=1.0.0&LAYER=img&tileMatrixSet=w&TileMatrix={TileMatrix}&TileRow={TileRow}&TileCol={TileCol}&style=default&format=tiles&tk=e378319b5250eff0fdd562f3aa190e62",
+            layer: "img",
+            style: "default",
+            format: "tiles",
+            tileMatrixSetID: "w",
+            credit: new Cesium.Credit('天地图全球影像服务'),
+            subdomains: ['t0', "t1", "t2", "t3", "t4", "t5", "t6", "t7"],
+            maximumLevel: 18,
+            show: true
+        })
+
+        var viewer = new Cesium.Viewer('cesiumContainer',{
+            baseLayerPicker:false,
+            homeButton:false,
+            infoBox:false,
+            timeline:false,
+            animation:false,
+            sceneModePicker:false,
+            navigationHelpButton:false,
+            imageryProvider:tianditu
+        })
+    </script>
+</body>
+</html>

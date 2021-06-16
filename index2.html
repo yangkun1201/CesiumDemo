@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cesium App 加载地形</title>
+    <script src="./scripts/Cesium/Cesium.js"></script>
+    <link rel="stylesheet" href="./scripts/Cesium/Widgets/widgets.css">
+    <style>
+        html,body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div id="cesiumContainer" style="width: 100%;height: 100%;"></div>
+    <script>
+
+        var terrain1 = new Cesium.CesiumTerrainProvider({
+            url : Cesium.IonResource.fromAssetId(3956),
+            requestVertexNormals : true
+        })
+
+        var terrain2 = new Cesium.createWorldTerrain({
+            requestWaterMask : true,
+            requestVertexNormals : true
+        });
+
+        var viewer = new Cesium.Viewer('cesiumContainer',{
+            baseLayerPicker:false,
+            homeButton:false,
+            infoBox:false,
+            timeline:false,
+            animation:false,
+            sceneModePicker:false,
+            navigationHelpButton:false,
+            terrainProvider:terrain2
+        })
+    </script>
+</body>
+</html>
