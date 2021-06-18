@@ -20,9 +20,14 @@
 <body>
     <div id="cesiumContainer" style="width: 100%;height: 100%;"></div>
     <script>
-
+        // 谷歌地图影像
         var google = new Cesium.UrlTemplateImageryProvider({
             url: "http://mt1.google.cn/vt/lyrs=s&hl=zh-CN&x={x}&y={y}&z={z}&s=Gali"
+        })
+
+        // 高德地图影像
+        var gd = new Cesium.UrlTemplateImageryProvider({
+            url: "http://webrd02.is.autonavi.com/appmaptile?lang=zh_cn&size=1&scale=1&style=8&x={x}&y={y}&z={z}",
         })
 
         var viewer = new Cesium.Viewer('cesiumContainer', {
@@ -33,44 +38,41 @@
             animation: false,
             sceneModePicker: false,
             navigationHelpButton: false,
-            imageryProvider: google
+            imageryProvider: gd
         })
 
+        // 隐藏底部cesium标识
+        viewer._cesiumWidget._creditContainer.style.display = "none";
+
+        // 设置视角
         viewer.camera.setView({
-            destination: new Cesium.Cartesian3(1332761.6877998516, -4662399.913291841, 4137888.8927274314),
+            destination: new Cesium.Cartesian3(-2796170.550688072, 4869287.955588737, 3016298.7062312206),
             orientation: {
-                heading: 0.6816, // east, default value is 0.0 (north)
-                pitch: -0.666,    // default value (looking down)
-                roll: 0.0                             // default value
+                heading: 0.15106652035435975, // east, default value is 0.0 (north)
+                pitch: -0.8440188669317208, // default value (looking down)
+                roll: 0.0 // default value
             }
         });
 
-        var city = viewer.scene.primitives.add(new Cesium.Cesium3DTileset(
-            {url:Cesium.IonResource.fromAssetId(3839)}
-        ));
-
-        // var transparentStyle = new Cesium.Cesium3DTileStyle({
-        //     color: "color('pink',0.4)",
-        //     show: true
-        // });
-
-        var heightStyle = new Cesium.Cesium3DTileStyle({
-            color : {
-                conditions : [
-                    ["${height} >= 300","rgba(45,0,75,0.5)"],
-                    ["${height} >= 200","rgb(102,71,151)"],
-                    ["${height} >= 100","rgb(170,162,204)"],
-                    ["${height} >= 50","rgb(224,226,238)"],
-                    ["${height} >= 25","rgb(252,230,200)"],
-                    ["${height} >= 10","rgb(248,176,87)"],
-                    ["${height} >= 5","rgb(198,106,11)"],
-                    ["true","rgb(127,59,8)"],
-                ]
-            }
+        // 加载3dTiles数据
+        var tileset1 = new Cesium.Cesium3DTileset({
+            url: 'https://tiledata.oss-cn-hangzhou.aliyuncs.com/202104kaifaqu/qukuai2/qukuai2m3dtiles.json',
+            dynamicScreenSpaceError: true,
+            dynamicScreenSpaceErrorDensity: 0.00278,
+            dynamicScreenSpaceErrorFactor: 4.0,
+            dynamicScreenSpaceErrorHeightFalloff: 0.25,
+            maximumScreenSpaceError: 1 // 设置模型显示精细度
         });
-
-        city.style = heightStyle;
-
+        var tileset2 = new Cesium.Cesium3DTileset({
+            url: 'https://tiledata.oss-cn-hangzhou.aliyuncs.com/202104kaifaqu/qukuai3/qukuai3m3dtiles.json',
+            dynamicScreenSpaceError: true,
+            dynamicScreenSpaceErrorDensity: 0.00278,
+            dynamicScreenSpaceErrorFactor: 4.0,
+            dynamicScreenSpaceErrorHeightFalloff: 0.25,
+            maximumScreenSpaceError: 1 // 设置模型显示精细度
+        });
+        var city1 = viewer.scene.primitives.add(tileset1);
+        var city2 = viewer.scene.primitives.add(tileset2);
     </script>
 </body>
 
